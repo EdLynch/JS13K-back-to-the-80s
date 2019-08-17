@@ -242,10 +242,20 @@ function renderBackground() {
 
   mountains.forEach(m=>{drawMountain(m);updateMountain(m)})
   mountains.push({x:450,y:300,scale:0})
+
+  mountainList.forEach(m=>drawMountainStrand(m, "#00f7ff"))
+  shouldAddMountain === 0 ? addMountain() : shouldAddMountain--
+  mountainList = transformMountains(mountainList)
 }
 
+let shouldAddMountain = 9;
 
-const mountain1 = {x:450,y:300,scale:0}
+function addMountain(){
+  mountainList.push(createMountainNode(mountainList[mountainList.length-1]))
+  shouldAddMountain = 9
+}
+
+const mountain1 = {x:400,y:300,scale:0}
 const mountains = []
 
 function drawMountain({x,y,scale}){
@@ -262,9 +272,15 @@ function updateMountain(mountain){
 }
 
 
+let mountainList = [{pos:[895,300],height:5,width:40,point:(getRandomInt(5,30))}]
 
+function createMountainNode(lastNode){
+  return {pos:[lastNode.pos[0]-40,lastNode.pos[1]],height:lastNode.height-6,width:40,point:(getRandomInt(5,30))}
+}
 
-
+function transformMountains(mountainArray){
+  return mountainArray.map(m=>({...m,pos:[m.pos[0]+4,m.pos[1]],height:m.height+.6}))
+}
 
 
 function createMountainObj(flipped){
@@ -295,4 +311,20 @@ function renderMountains() {
 
 function drawMountainTrail(){
   
+}
+
+function drawMountainStrand(mountain, stroke = "#ff36f2", fill = "#000040") {
+  ctxs.background.beginPath();
+  ctxs.background.moveTo(...mountain.pos);
+  ctxs.background.lineTo(mountain.pos[0]+mountain.width/2,mountain.pos[1]-mountain.point);
+  ctxs.background.lineTo(mountain.pos[0]+mountain.width,mountain.pos[1]+5);
+  ctxs.background.lineTo(mountain.pos[0]+mountain.width,mountain.pos[1]+mountain.height);
+  ctxs.background.lineTo(mountain.pos[0],mountain.pos[1]+mountain.height-5);
+  ctxs.background.closePath();
+  ctxs.background.lineWidth = 5;
+  ctxs.background.strokeStyle = stroke;
+  ctxs.background.stroke();
+
+  ctxs.background.fillStyle = fill;
+  ctxs.background.fill();
 }
