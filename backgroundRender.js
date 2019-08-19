@@ -49,6 +49,23 @@ const mountain = [
   [200, 200]
 ];
 
+//https://medium.com/@ziyoshams/deep-copying-javascript-arrays-4d5fc45a6e3e
+const deepCopy = (arr) => {
+  let copy = [];
+  arr.forEach(elem => {
+    if(Array.isArray(elem)){
+      copy.push(deepCopy(elem))
+    }else{
+      if (typeof elem === 'object') {
+        copy.push(deepCopyObject(elem))
+    } else {
+        copy.push(elem)
+      }
+    }
+  })
+  return copy;
+}
+
 let activeMountain = [...mountain];
 
 function getRandomMountain(x, y, flipped = false, scale = 1) {
@@ -103,23 +120,24 @@ function renderSky() {
   ctxs.background.fillRect(0, 0, 1500, 300);
 }
 
-function triangle(p1, p2, p3) {
+function triangle(p1, p2, p3, fill="#000040") {
   // the triangle
-  ctxs.background.beginPath();
-  ctxs.background.moveTo(...p1);
-  ctxs.background.lineTo(...p2);
-  ctxs.background.lineTo(...p3);
-  ctxs.background.closePath();
+  ctxs.middle.beginPath();
+  ctxs.middle.moveTo(...p1);
+  ctxs.middle.lineTo(...p2);
+  ctxs.middle.lineTo(...p3);
+  ctxs.middle.closePath();
 
   // the outline
-  ctxs.background.lineWidth = 5;
-  ctxs.background.strokeStyle = "#ff36f2";
-  ctxs.background.stroke();
+  ctxs.middle.lineWidth = 3;
+  ctxs.middle.strokeStyle = "#00f7ff";
+ ctxs.middle.stroke();
 
   // the fill color
-  ctxs.background.fillStyle = "#000040";
-  ctxs.background.fill();
+  //ctxs.middle.fillStyle = fill;
+  ctxs.middle.fill();
 }
+
 
 function cube(p1, p2, p3, p4, stroke = "#ff36f2", fill = "#000040") {
   ctxs.background.beginPath();
@@ -231,24 +249,103 @@ const median = arr => {
   return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
 };
 
+
+let firstStrand = {coords:[[[250,270],[350,300],[250,320],[150,300]],
+[[150,250],[200,220],[250,270],[150,300]],
+[[150,200],[170,150],[200,220],[150,250]],
+[[100,100],[100,100],[170,150],[150,200]]],scale:1}
+
+
+let strands = [firstStrand]
+
 function renderBackground() {
   renderFloor();
   renderGrid(time);
-  renderSky();
   renderSun();
+  renderSky();
  // renderMountains();
-  ctxs.background.moveTo(200, 200);
-  ctxs.background.moveTo(0, 0);
-
-  mountains.forEach(m=>{drawMountain(m);updateMountain(m)})
-  mountains.push({x:450,y:300,scale:0})
 
   mountainList.forEach(m=>drawMountainStrand(m, "#00f7ff"))
   shouldAddMountain === 0 ? addMountain() : shouldAddMountain--
   mountainList = transformMountains(mountainList)
+  ctxs.background.save()
+  ctxs.background.scale(.4,.4);
+  ctxs.background.translate(300,380);
+  strands.forEach(strand=>strand.coords.forEach((square=>
+    drawSquare(square)
+  )))
+  //ctxs.background.scale(2,2);
+  ctxs.background.restore()
+  transformStrands()
+  addStrand()
+
+  triangleBlock(0,300,40,10,10)
+  
+  ctxs.middle.save();
+  ctxs.middle.globalCompositeOperation = 'destination-out';
+  triangle([0,450],[400,300],[1000,600],"rgba(0,0,0,0)")
+  ctxs.middle.restore();
 }
 
 let shouldAddMountain = 9;
+
+
+function addStrand(){
+  const lastStrand = deepCopy(strands[strands.length-1].coords)
+  let newStrand = deepCopy(lastStrand)
+
+  newStrand = newStrand.map(square=>square.map(point=>[point[0]+50,point[1]-20]))
+
+  //top point
+ // newStrand[3][0] = lastStrand[3][0]
+  //newStrand[3][1] = lastStrand[3][1]
+  newStrand[3][2] = lastStrand[3][2]
+  
+  newStrand[3][2] = newStrand[2][1]
+  newStrand[3][3] = newStrand[2][0]
+
+  newStrand[2][0] = lastStrand[2][1]
+  newStrand[2][3] = lastStrand[2][2]
+
+
+  //second point down
+  newStrand[1][3] = lastStrand[1][2]
+  newStrand[1][0] = lastStrand[1][1]
+  newStrand[1][2] = newStrand[0][1]
+
+  
+  
+  //bottom point
+ newStrand[0][3] = lastStrand[0][1]
+// newStrand[0][0] = lastStrand[0][0]
+ newStrand[0][2] = lastStrand[0][1]
+
+ 
+
+ //
+  newStrand[3] = newStrand[3].map(strand => [strand[0],strand[1]+5])
+  newStrand[2] = newStrand[2].map(strand => [strand[0],strand[1]+5])
+  newStrand[1] = newStrand[1].map(strand => [strand[0],strand[1]+5])
+
+ strands.push({ coords: newStrand, scale: strands[strands.length-1].scale -= 0.1 })
+}
+
+function transformStrands(){
+  const newStrands = []
+  strands.forEach(strand => {
+    const coords = strand.coords.map(strand => strand.map(cube =>[cube[0]-10,cube[1]+2]))
+    const scale = strand.scale
+
+    
+    coords[3] = coords[3].map(strand => [strand[0],strand[1]-.8])
+    coords[2] = coords[2].map(strand => [strand[0],strand[1]-.8])
+    coords[1] = coords[1].map(strand => [strand[0],strand[1]+.8])
+    coords[0] = coords[0].map(strand => [strand[0],strand[1]+.8])
+
+    newStrands.push({coords, scale})
+  })
+  strands = newStrands
+}
 
 function addMountain(){
   mountainList.push(createMountainNode(mountainList[mountainList.length-1]))
@@ -282,37 +379,6 @@ function transformMountains(mountainArray){
   return mountainArray.map(m=>({...m,pos:[m.pos[0]+4,m.pos[1]],height:m.height+.6}))
 }
 
-
-function createMountainObj(flipped){
-  return {data:getRandomMountain(0, 0, flipped),x:5800+(flipped?2100:-2100),y:2600,scale:.1}
-}
-mountains.push(createMountainObj(false));
-mountains.push(createMountainObj(true));
-
-function renderAndUpdateMountain(m){
-  ctxs.background.save()
-  ctxs.background.scale(m.scale,m.scale)
-  ctxs.background.translate(m.x,m.y)
-  chainedCube(m.data,m.scale, m.x, m.y)
-  m.scale += 0.005
-
-  ctxs.background.restore()
-}
-
-function renderMountains() {
-  addMountainsEveryFrames--
-  if(!addMountainsEveryFrames){
-    mountains.push(createMountainObj(false));
-    mountains.push(createMountainObj(true));
-    addMountainsEveryFrames = 30
-  }
-  mountains.forEach(m => renderAndUpdateMountain(m));
-}
-
-function drawMountainTrail(){
-  
-}
-
 function drawMountainStrand(mountain, stroke = "#ff36f2", fill = "#000040") {
   ctxs.background.beginPath();
   ctxs.background.moveTo(...mountain.pos);
@@ -327,4 +393,34 @@ function drawMountainStrand(mountain, stroke = "#ff36f2", fill = "#000040") {
 
   ctxs.background.fillStyle = fill;
   ctxs.background.fill();
+}
+
+function drawTestMountain(x=300,y=300){
+  drawTriangle([[x,y],[x+20,y+20],[x-20,y+20]])
+  drawTriangle([[x,y],[x-20,y+20],[x-10,y+20]])
+}
+
+function drawSquare(points, stroke = "#00f7ff", fill = "#000040") {
+  ctxs.background.beginPath();
+  ctxs.background.moveTo(...points[0]);
+  ctxs.background.lineTo(...points[1]);
+  ctxs.background.lineTo(...points[2]);
+  ctxs.background.lineTo(...points[3]);
+  ctxs.background.closePath();
+  ctxs.background.lineWidth = 5;
+  ctxs.background.strokeStyle = stroke;
+  ctxs.background.stroke();
+
+  ctxs.background.fillStyle = fill;
+  ctxs.background.fill();
+}
+
+
+function triangleBlock(x,y,size,width,height){
+  for(let w = 0; w < width*size; w+=size){
+    for(let h = 0; h < height*size; h+=size){
+      triangle([x+w,y+h],[x+size+w,y+h],[x+size/2+w,y+size+h])
+      triangle([x-size/2+w,y+h+size],[x+w,y+h],[x+size/2+w,y+size+h])
+    }
+  }
 }
