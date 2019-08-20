@@ -199,12 +199,12 @@ function updateMountain(mountain,index){
     mountain.x-=4
     mountain.y-=.5
     mountain.scale+=0.01
-    //if(mountain.x<-100) mountainsLeft.splice(index,1)
+    if(mountain.x<-100) mountainsLeft.splice(index,1)
   }else{
     mountain.x+=4
     mountain.y-=.5
     mountain.scale+=0.01
-    //if(mountain.x>1500) mountainsRight.splice(index,1)
+    if(mountain.x>1500) mountainsRight.splice(index,1)
   }
 }
 
