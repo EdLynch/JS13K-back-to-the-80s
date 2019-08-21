@@ -26,6 +26,22 @@ function renderLine(start, end, colour) {
   ctxs.background.stroke();
 }
 
+
+function drawSquare(points, fill, stroke = "#00f7ff") {
+  ctxs.background.beginPath();
+  ctxs.background.moveTo(...points[0]);
+  ctxs.background.lineTo(...points[1]);
+  ctxs.background.lineTo(...points[2]);
+  ctxs.background.lineTo(...points[3]);
+  ctxs.background.closePath();
+  ctxs.background.lineWidth = 2;
+  ctxs.background.strokeStyle = stroke;
+  ctxs.background.stroke();
+
+  ctxs.background.fillStyle = fill;
+  if(fill) ctxs.background.fill();
+}
+
 function renderGrid(proggress) {
   proggress = proggress % 20;
   for (let yOffset = 250; yOffset < 600; yOffset += 20) {
@@ -78,22 +94,6 @@ function triangle(p1, p2, p3, fill="#000040", stroke="#00f7ff") {
   ctxs.middle.fill();
 }
 
-
-function cube(p1, p2, p3, p4, stroke = "#ff36f2", fill = "#000040") {
-  ctxs.background.beginPath();
-  ctxs.background.moveTo(...p1);
-  ctxs.background.lineTo(...p2);
-  ctxs.background.lineTo(...p3);
-  ctxs.background.lineTo(...p4);
-  ctxs.background.closePath();
-  ctxs.background.lineWidth = 5;
-  ctxs.background.strokeStyle = stroke;
-  ctxs.background.stroke();
-
-  ctxs.background.fillStyle = fill;
-  ctxs.background.fill();
-}
-
 function renderSun() {
   ctxs.sun.beginPath();
   var my_gradient = ctxs.sun.createLinearGradient(0, 200, 0, 150);
@@ -118,32 +118,6 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-//###############################
-//#############STOLEN############
-//###############################
-const median = arr => {
-  const mid = Math.floor(arr.length / 2),
-    nums = [...arr].sort((a, b) => a - b);
-  return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
-};
-
-
-
-
-function drawSquare(points, stroke = "#00f7ff", fill = "#000040") {
-  ctxs.background.beginPath();
-  ctxs.background.moveTo(...points[0]);
-  ctxs.background.lineTo(...points[1]);
-  ctxs.background.lineTo(...points[2]);
-  ctxs.background.lineTo(...points[3]);
-  ctxs.background.closePath();
-  ctxs.background.lineWidth = 5;
-  ctxs.background.strokeStyle = stroke;
-  ctxs.background.stroke();
-
-  ctxs.background.fillStyle = fill;
-  ctxs.background.fill();
-}
 
 function renderMountain({x,y,scale, alt, left}){
   ctxs.middle.save()
@@ -210,12 +184,39 @@ function updateMountain(mountain,index){
 
 let mountainCount = 10;
 
+
+function renderPlayer(x,y,width,height){
+
+  //collision box
+  drawSquare([[x-width,y-height],[x+width,y-height],[x+width,y+height],[x-width,y+height]])
+
+  //top
+  drawSquare([[x,y-height],[x,y-height/1.5],[x,y-height/1.5],[x-width/4,y-height/1.5]],"rgb(99, 99, 99)")
+  drawSquare([[x,y-height],[x,y-height/1.5],[x,y-height/1.5],[x+width/4,y-height/1.5]],"rgb(99, 99, 99)")
+
+  //mid mid
+  drawSquare([[x+width/3,y-height/4],[x,y-height/4],[x,y-height/1.5],[x+width/4,y-height/1.5]],"rgb(99, 99, 99)")
+  drawSquare([[x-width/3,y-height/4],[x,y-height/4],[x,y-height/1.5],[x-width/4,y-height/1.5]],"rgb(99, 99, 99)")
+  //mid left
+  drawSquare([[x-width/3,y-height/4],[x-width/2,y-height/4],[x-width/4,y-height/1.5],[x-width/4,y-height/1.5]],"rgb(99, 99, 99)")
+  //mid right
+  drawSquare([[x+width/3,y-height/4],[x+width/2,y-height/4],[x+width/4,y-height/1.5],[x+width/4,y-height/1.5]],"rgb(99, 99, 99)")
+
+  
+}
+
+setInterval(() => {
+  renderBackground(), time++;
+}, 30);
+
+
 function renderBackground() {
   ctxs.middle.clearRect(0,0,2000,2000)
   renderFloor();
   renderGrid(time);
   renderSun();
   renderSky();
+  renderPlayer(600,400,75,40)
   mountainsLeft.forEach(mountain => renderMountain(mountain))
   mountainsLeft.forEach((mountain,index) => updateMountain(mountain,index))
   mountainsRight.forEach(mountain => renderMountain(mountain))
@@ -233,7 +234,3 @@ function renderBackground() {
   }
   mountainCount--
 }
-
-setInterval(() => {
-  renderBackground(), time++;
-}, 30);
