@@ -201,6 +201,8 @@ function renderPlayer(x,y,width,height){
   drawSquare([[x-width/3,y-height/4],[x-width/2,y-height/4],[x-width/4,y-height/1.5],[x-width/4,y-height/1.5]],"rgb(99, 99, 99)")
   //mid right
   drawSquare([[x+width/3,y-height/4],[x+width/2,y-height/4],[x+width/4,y-height/1.5],[x+width/4,y-height/1.5]],"rgb(99, 99, 99)")
+  //top spinner right
+  drawSquare([[x+width/1.5,y],[x+width/4,y-height/4],[x+width/2,y-height/4],[x+width,y]],"rgb(99, 99, 99)")
 
   
 }
