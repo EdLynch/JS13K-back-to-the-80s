@@ -27,14 +27,14 @@ function renderLine(start, end, colour) {
 }
 
 
-function drawSquare(points, fill, stroke = "#00f7ff") {
+function drawSquare(points, fill, stroke = "#00f7ff", strokeWidth=2) {
   ctxs.background.beginPath();
   ctxs.background.moveTo(...points[0]);
   ctxs.background.lineTo(...points[1]);
   ctxs.background.lineTo(...points[2]);
   ctxs.background.lineTo(...points[3]);
   ctxs.background.closePath();
-  ctxs.background.lineWidth = 2;
+  ctxs.background.lineWidth = strokeWidth;
   ctxs.background.strokeStyle = stroke;
   ctxs.background.stroke();
 
@@ -200,16 +200,82 @@ function renderPlayer(x,y,width,height){
   //mid left
   drawSquare([[x-width/3,y-height/4],[x-width/2,y-height/4],[x-width/4,y-height/1.5],[x-width/4,y-height/1.5]],"rgb(99, 99, 99)")
   //mid right
-  drawSquare([[x+width/3,y-height/4],[x+width/2,y-height/4],[x+width/4,y-height/1.5],[x+width/4,y-height/1.5]],"rgb(99, 99, 99)")
+  drawSquare([[x+width/3,y-height/4],[x+width/42,y-height/4],[x+width/4,y-height/1.5],[x+width/4,y-height/1.5]],"rgb(99, 99, 99)")
   //top spinner right
   drawSquare([[x+width/1.5,y],[x+width/4,y-height/4],[x+width/2,y-height/4],[x+width,y]],"rgb(99, 99, 99)")
 
   
 }
 
-setInterval(() => {
-  renderBackground(), time++;
-}, 30);
+player = {x:600,y:500,scale:2,width:75,height:40,
+  movePlayer:(dX,dY) => {
+    if(player.y+dY > 300) {
+      player.y+=dY
+      player.scale+=dY/100
+    }
+    player.x+=dX
+  },
+  getDetails: () => [player.x,player.y,player.width*player.scale,player.height*player.scale]
+}
+
+function drawCar(x,y,w,h){
+
+  //drawSquare([[x-w,y-h],[x+w,y-h],[x+w,y+h],[x-w,y+h]])
+
+
+  //doors
+  //left
+  drawSquare([[x-w/3,y-h],[x-w/1.75,y-h/1.75],[x-w/1.5,y+h/2],[x-w/2.5,y-h/1.5]],"#a9a9a9","rgba(0,0,0,0)")
+  //right
+  drawSquare([[x+w/3,y-h],[x+w/1.75,y-h/1.75],[x+w/1.5,y+h/2],[x+w/2.5,y-h/1.5]],"#a9a9a9","rgba(0,0,0,0)")
+
+  //roof
+  drawSquare([[x-w/3,y-h],[x+w/3,y-h],[x+w/2.5,y-h/1.5],[x-w/2.5,y-h/1.5]],"#d6d6d6","rgba(0,0,0,0)")
+  //back window
+  drawSquare([[x-w/2,y],[x+w/2,y],[x+w/2.5,y-h/1.5],[x-w/2.5,y-h/1.5]],"black","#00f7ff", 3)
+  //left back
+  drawSquare([[x-w/2,y],[x-w/1.75,y],[x-w/2.5,y-h/1.5],[x-w/2.5,y-h/1.5]],"#a9a9a9","rgba(0,0,0,0)")
+  //right back
+  drawSquare([[x+w/1.75,y],[x+w/2,y],[x+w/2.5,y-h/1.5],[x+w/2.5,y-h/1.5]],"#a9a9a9","rgba(0,0,0,0)")
+  //boot
+  drawSquare([[x-w/1.75,y],[x+w/1.75,y],[x+w/1.5,y+h/2],[x-w/1.5,y+h/2]],"#d6d6d6","rgba(0,0,0,0)")
+  
+  //Boot features
+  //light left
+  drawSquare([[x-w/2,y+h/10],[x-w/4,y+h/10],[x-w/4,y+h/2.5],[x-w/1.8,y+h/2.5]],"red","black", 1)
+  //light right
+  drawSquare([[x+w/2,y+h/10],[x+w/4,y+h/10],[x+w/4,y+h/2.5],[x+w/1.8,y+h/2.5]],"red","black", 1)
+  //central black
+  drawSquare([[x-w/4,y+h/10],[x+w/4,y+h/10],[x+w/4,y+h/2.5],[x-w/4,y+h/2.5]],"black","black", 1)
+  //central white
+  drawSquare([[x-w/8,y+h/5],[x+w/8,y+h/5],[x+w/8,y+h/3],[x-w/8,y+h/3]],"white","black")
+
+  //boot base
+  drawSquare([[x-w/1.75,y+h/1.5],[x+w/1.75,y+h/1.5],[x+w/1.5,y+h/2],[x-w/1.5,y+h/2]],"#d6d6d6","rgba(0,0,0,0)")
+  //bumper
+  drawSquare([[x-w/1.75,y+h/1.5],[x+w/1.75,y+h/1.5],[x+w/2.25,y+h/1.15],[x-w/2.25,y+h/1.15]],"black","rgba(0,0,0,0)")
+
+  //back window
+  drawSquare([[x-w/2,y],[x+w/2,y],[x+w/2.5,y-h/1.5],[x-w/2.5,y-h/1.5]],"black","#00f7ff", 1)
+  //windows
+  //left window
+  drawSquare([[x-w/1.9,y-h/2],[x-w/1.75,y],[x-w/2.5,y-h/1.5],[x-w/2.5,y-h/1.5]],"#19a1b3","black", 1)
+  //right back
+  drawSquare([[x+w/1.9,y-h/2],[x+w/1.75,y],[x+w/2.5,y-h/1.5],[x+w/2.5,y-h/1.5]],"#19a1b3","black", 1)
+  //central windows, top to bottom
+  drawSquare([[x-w/3,y-h/2.25],[x+w/3,y-h/2.25],[x+w/4,y-h/1.75],[x-w/4,y-h/1.75]],"#19a1b3","rgba(0,0,0,0)")
+  drawSquare([[x-w/2.5,y-h/3.5],[x+w/2.5,y-h/3.5],[x+w/3,y-h/2.5],[x-w/3,y-h/2.5]],"#19a1b3","rgba(0,0,0,0)")
+  drawSquare([[x-w/2.1,y-h/7],[x+w/2.1,y-h/7],[x+w/2.5,y-h/4],[x-w/2.5,y-h/4]],"#19a1b3","rgba(0,0,0,0)")
+
+  //wing mirrors
+  //left
+  drawSquare([[x+w/2.1,y-h/1.2],[x+w/1.8,y-h/1.15],[x+w/1.7,y-h/1.3],[x+w/2,y-h/1.3]],"#19a1b3","black", 1)
+  //right
+  drawSquare([[x-w/2.1,y-h/1.2],[x-w/1.8,y-h/1.15],[x-w/1.7,y-h/1.3],[x-w/2,y-h/1.3]],"#19a1b3","black", 1)
+
+}
+
+setInterval(tick, 30);
 
 
 function renderBackground() {
@@ -218,10 +284,23 @@ function renderBackground() {
   renderGrid(time);
   renderSun();
   renderSky();
-  renderPlayer(600,400,75,40)
   mountainsLeft.forEach(mountain => renderMountain(mountain))
-  mountainsLeft.forEach((mountain,index) => updateMountain(mountain,index))
   mountainsRight.forEach(mountain => renderMountain(mountain))
+
+}
+
+function playerMovement(){
+  let dX = 0, dY = 0
+  if(buttonsDown.includes('a')) dX -= 5
+  if(buttonsDown.includes('d')) dX += 5
+  if(buttonsDown.includes('w')) dY -= 5
+  if(buttonsDown.includes('s')) dY += 5
+  player.movePlayer(dX,dY)
+
+}
+
+function computeMountains(){
+  mountainsLeft.forEach((mountain,index) => updateMountain(mountain,index))
   mountainsRight.forEach((mountain,index) => updateMountain(mountain,index))
   if(mountainCount == 0){
     mountainsLeft.push({x:750,y:300,scale:.05,alt:[getRandomInt(-50,50),getRandomInt(-50,50)],left:true} );
@@ -235,4 +314,20 @@ function renderBackground() {
     mountainCount=10;
   }
   mountainCount--
+}
+
+function compute(){
+  time++
+  computeMountains()
+  playerMovement()
+}
+
+function render(){
+  renderBackground()
+  drawCar(...player.getDetails())
+}
+
+function tick() {
+  compute()
+  render()
 }
