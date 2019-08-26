@@ -29,10 +29,12 @@ function compute(){
     time++
     computeMountains()
     playerMovement()
+    computePath()
   }
   
   function render(){
     renderBackground()
+    renderPath()
     drawCar(...player.getDetails())
   }
   
