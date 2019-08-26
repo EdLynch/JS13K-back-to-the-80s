@@ -22,4 +22,25 @@ function spawnObject(){
 
 }
 
-renderBackground();
+let time = 0;
+
+
+function compute(){
+    time++
+    computeMountains()
+    playerMovement()
+  }
+  
+  function render(){
+    renderBackground()
+    drawCar(...player.getDetails())
+  }
+  
+  function tick() {
+    compute()
+    render()
+  }
+
+  
+
+setInterval(tick, 30);
