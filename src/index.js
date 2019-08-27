@@ -1,3 +1,5 @@
+ 
+
 const ctxs = {
     overlay: document.getElementById("overlayCanvas").getContext("2d"),
     middle: document.getElementById("middleCanvas").getContext("2d"),
@@ -29,13 +31,15 @@ function compute(){
     time++
     computeMountains()
     playerMovement()
-    computePath()
+    //computePath()
+    computeObstacles()
   }
   
   function render(){
     renderBackground()
-    renderPath()
+    //renderPath()
     drawCar(...player.getDetails())
+    renderObstacles()
   }
   
   function tick() {

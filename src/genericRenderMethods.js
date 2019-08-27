@@ -9,7 +9,6 @@ function renderLine(start, end, colour) {
   
   
   function drawSquare(points, fill, stroke = "#00f7ff", strokeWidth=2) {
-      console.log(points,fill)
     ctxs.background.beginPath();
     ctxs.background.moveTo(...points[0]);
     ctxs.background.lineTo(...points[1]);
