@@ -7,39 +7,23 @@ const ctxs = {
     sun: document.getElementById("sunCanvas").getContext("2d"),
 }
 
-const convertSpriteToPixels = (sprite) => sprite.map(p=>typeof p === "string" ? p : ((p.c+"@").repeat(p.a)).split("@")).flat()
-
-function renderGameObject({ x, y, width, sprite, layer }){
-    const pixels = convertSpriteToPixels(sprite)
-    let lineOffset = 0;
-    for(let i = 0; i < pixels.length; i++){
-        if(i/(lineOffset+1) > width) lineOffset++;
-        ctxs[layer].fillStyle = pixels[i];
-        ctxs[layer].fillRect( x+i-(width*lineOffset), y+lineOffset, 1, 1 );
-    }
-}
-
-
-function spawnObject(){
-
-}
-
 let time = 0;
 
+let player = new Player()
+
+const gameObjects = [ new Enviroment(), new Player()]
 
 function compute(){
     time++
-    computeMountains()
-    playerMovement()
     //computePath()
-    computeObstacles()
+    
+    if(getRandomInt(0,50) === 0) gameObjects.push(new Obstacle())
+    gameObjects.forEach(obj=>obj.compute())
   }
   
   function render(){
-    renderBackground()
     //renderPath()
-    drawCar(...player.getDetails())
-    renderObstacles()
+    gameObjects.forEach(obj=>obj.render())
   }
   
   function tick() {

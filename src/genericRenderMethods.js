@@ -23,24 +23,6 @@ function renderLine(start, end, colour) {
     if(fill) ctxs.background.fill();
   }
   
-  function renderGrid(proggress) {
-    proggress = proggress % 20;
-    for (let yOffset = 250; yOffset < 600; yOffset += 20) {
-      renderLine(
-        [0, yOffset + proggress],
-        [1500, yOffset + proggress],
-        "#ff36f2"
-      );
-    }
-    let offset = 2014;
-    let halfPoint = 1500 / 2;
-    for (let xOffset = 0 - 1500; xOffset < 1500 + 1500; xOffset += 100) {
-      if (xOffset > halfPoint && offset > 1) offset *= -1;
-      offset -= 90;
-      renderLine([xOffset + offset, 300], [xOffset, 600], "#ff36f2");
-    }
-  }
-
   function triangle(p1, p2, p3, fill="#000040", stroke="#00f7ff") {
     // the triangle
     ctxs.middle.beginPath();
