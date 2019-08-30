@@ -52,6 +52,8 @@ function Obstacle(){
     const initX = getRandomInt(1275/2-100,1275/2+100)
     this.x = initX
     this.y = 300
+    this.w = 10
+    this.h = 10
     this.initX = initX
     this.alt = getRandomInt(1,10)
     this.compute = () => {
@@ -61,4 +63,14 @@ function Obstacle(){
     this.render = () => {
         drawObstacle([this.x, this.y, this.initX, this.alt])
     }
+    this.drawCollisionBox = () =>{
+        const {x,y,w,h,initX} = this
+        if(obstacle[0]<1275/2){
+            drawSquare([[x-12,y-initX],[y-initX]], null, "red", null, "debug")
+        }else{
+            drawSquare([], null, "red", null, "debug")
+        }
+    } 
 }
+
+Obstacle.prototype = Object.create(GameObject.prototype)

@@ -1,42 +1,42 @@
-function renderLine(start, end, colour) {
-    ctxs.background.beginPath();
-    ctxs.background.strokeStyle = colour;
-    ctxs.background.lineWidth = 3;
-    ctxs.background.moveTo(...start);
-    ctxs.background.lineTo(...end);
-    ctxs.background.stroke();
+function renderLine(start, end, colour, canvas="background") {
+    ctxs[canvas].beginPath();
+    ctxs[canvas].strokeStyle = colour;
+    ctxs[canvas].lineWidth = 3;
+    ctxs[canvas].moveTo(...start);
+    ctxs[canvas].lineTo(...end);
+    ctxs[canvas].stroke();
   }
   
   
-  function drawSquare(points, fill, stroke = "#00f7ff", strokeWidth=2) {
-    ctxs.background.beginPath();
-    ctxs.background.moveTo(...points[0]);
-    ctxs.background.lineTo(...points[1]);
-    ctxs.background.lineTo(...points[2]);
-    ctxs.background.lineTo(...points[3]);
-    ctxs.background.closePath();
-    ctxs.background.lineWidth = strokeWidth;
-    ctxs.background.strokeStyle = stroke;
-    ctxs.background.stroke();
+  function drawSquare(points, fill, stroke = "#00f7ff", strokeWidth=2, canvas="background") {
+    ctxs[canvas].beginPath();
+    ctxs[canvas].moveTo(...points[0]);
+    ctxs[canvas].lineTo(...points[1]);
+    ctxs[canvas].lineTo(...points[2]);
+    ctxs[canvas].lineTo(...points[3]);
+    ctxs[canvas].closePath();
+    ctxs[canvas].lineWidth = strokeWidth;
+    ctxs[canvas].strokeStyle = stroke;
+    ctxs[canvas].stroke();
   
-    ctxs.background.fillStyle = fill;
-    if(fill) ctxs.background.fill();
+    ctxs[canvas].fillStyle = fill;
+    if(fill) ctxs[canvas].fill();
   }
   
-  function triangle(p1, p2, p3, fill="#000040", stroke="#00f7ff") {
+  function triangle(p1, p2, p3, fill="#000040", stroke="#00f7ff", canvas="middle") {
     // the triangle
-    ctxs.middle.beginPath();
-    ctxs.middle.moveTo(...p1);
-    ctxs.middle.lineTo(...p2);
-    ctxs.middle.lineTo(...p3);
-    ctxs.middle.closePath();
+    ctxs[canvas].beginPath();
+    ctxs[canvas].moveTo(...p1);
+    ctxs[canvas].lineTo(...p2);
+    ctxs[canvas].lineTo(...p3);
+    ctxs[canvas].closePath();
   
     // the outline
-    ctxs.middle.lineWidth = 2;
-    ctxs.middle.strokeStyle = stroke;
-   ctxs.middle.stroke();
+    ctxs[canvas].lineWidth = 2;
+    ctxs[canvas].strokeStyle = stroke;
+    ctxs[canvas].stroke();
   
     // the fill color
-    ctxs.middle.fillStyle = fill;
-    ctxs.middle.fill();
+    ctxs[canvas].fillStyle = fill;
+    ctxs[canvas].fill();
   }

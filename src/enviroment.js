@@ -137,7 +137,12 @@ function Enviroment(){
     }
     mountainCount--
   }
+  this.drawCollisionBox = () =>{
+  } 
 }
+
+
+Enviroment.prototype = Object.create(GameObject.prototype)
 
 
 

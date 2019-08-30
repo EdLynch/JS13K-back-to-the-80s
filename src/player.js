@@ -2,8 +2,8 @@ function Player(){
     this.x = 600
     this.y = 500
     this.scale = 1.5
-    this.width = 75
-    this.height = 40
+    this.w = 75
+    this.h = 40
     this.xSpeed = 8
     this.ySpeed = 5
     this.colors = {
@@ -21,7 +21,7 @@ function Player(){
       }
       this.x+=dX*(this.scale*3)
     }
-    this.getDetails = () => [this.x,this.y,this.width*this.scale,this.height*this.scale]
+    this.getDetails = () => [this.x,this.y,this.w*this.scale,this.h*this.scale]
     this.render = () =>{
       const [x,y,w,h] = this.getDetails()  
       //doors
@@ -82,9 +82,14 @@ function Player(){
       if(buttonsDown.includes('w')) dY -= this.ySpeed
       if(buttonsDown.includes('s')) dY += this.ySpeed
       this.movethis(dX,dY)
-    
     }
     this.drawCollisionBox = () =>{
-      drawSquare([[x-w,y-h],[x+w,y-h],[x+w,y+h],[x-w,y+h]])
+      let {x,y,w,h} = this
+      w *= ((y-500)/230)+1
+      h *= ((y-500)/160)+1
+      drawSquare([[x-w,y-h-20],[x+w,y-h-20],[x+w,y+h+10],[x-w,y+h+10]])
     } 
 }
+
+
+Player.prototype = Object.create(GameObject.prototype)
