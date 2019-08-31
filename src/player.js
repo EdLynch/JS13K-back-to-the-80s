@@ -83,12 +83,22 @@ function Player(){
       if(buttonsDown.includes('s')) dY += this.ySpeed
       this.movethis(dX,dY)
     }
+    this.getCollisionBox = () => {
+      let {x,y,w,h} = this
+      w *= ((y-500)/230)+1
+      h *= ((y-500)/160)+1
+      return [[x-w,y-h-20],[x+w,y-h-20],[x+w,y+h+10],[x-w,y+h+10]]
+    }
     this.drawCollisionBox = () =>{
       let {x,y,w,h} = this
       w *= ((y-500)/230)+1
       h *= ((y-500)/160)+1
       drawSquare([[x-w,y-h-20],[x+w,y-h-20],[x+w,y+h+10],[x-w,y+h+10]])
     } 
+}
+
+Player.prototype.toString = function() {
+  return 'Player'
 }
 
 

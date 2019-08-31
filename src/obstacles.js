@@ -63,14 +63,32 @@ function Obstacle(){
     this.render = () => {
         drawObstacle([this.x, this.y, this.initX, this.alt])
     }
-    this.drawCollisionBox = () =>{
-        const {x,y,w,h,initX} = this
-        if(obstacle[0]<1275/2){
-            drawSquare([[x-12,y-initX],[y-initX]], null, "red", null, "debug")
+    this.getCollisionBox = () => {
+        const {x,y,initX, alt} = this
+        const g = getGrowth(y)
+        if(this.x<1275/2){
+            const coords = [[x-10*g,y-5*g-alt],[x+5*g,y-5*g-alt],[x+5*g,y+12*g-alt],[x-10*g,y+12*g-alt]]
+            return coords
         }else{
-            drawSquare([], null, "red", null, "debug")
+            const coords = [[x-5*g,y-5*g-alt],[x+10*g,y-5*g-alt],[x+10*g,y+12*g-alt],[x-5*g,y+12*g-alt]]
+            return coords
+        }
+    }
+    this.drawCollisionBox = () =>{
+        const {x,y,initX, alt} = this
+        const g = getGrowth(y)
+        if(this.x<1275/2){
+            const coords = [[x-10*g,y-5*g-alt],[x+5*g,y-5*g-alt],[x+5*g,y+12*g-alt],[x-10*g,y+12*g-alt]]
+            drawSquare(coords, null, "red", 2, "debug")
+        }else{
+            const coords = [[x-5*g,y-5*g-alt],[x+10*g,y-5*g-alt],[x+10*g,y+12*g-alt],[x-5*g,y+12*g-alt]]
+            drawSquare(coords, null, "red", 2, "debug")
         }
     } 
 }
+
+Obstacle.prototype.toString = function() {
+    return 'Obstacle'
+  }
 
 Obstacle.prototype = Object.create(GameObject.prototype)

@@ -11,3 +11,6 @@ GameObject.prototype.render = () =>{
 }
 GameObject.prototype.compute = () =>{
 }
+GameObject.prototype.onCollide = (collider) =>{
+    console.log("Ouch I just hit a" + collider)
+}
