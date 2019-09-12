@@ -23,7 +23,7 @@ function renderLine(start, end, colour, canvas="background") {
     if(fill) ctxs[canvas].fill();
   }
   
-  function triangle(p1, p2, p3, fill="#000040", stroke="#00f7ff", canvas="middle") {
+  function triangle(p1, p2, p3, fill="#000040", stroke="#00f7ff", canvas="background") {
     // the triangle
     ctxs[canvas].beginPath();
     ctxs[canvas].moveTo(...p1);
@@ -39,4 +39,22 @@ function renderLine(start, end, colour, canvas="background") {
     // the fill color
     ctxs[canvas].fillStyle = fill;
     ctxs[canvas].fill();
+  }
+
+  //TODO add circle draw
+  function circle(x,y,r,canvas="background"){
+    ctxs[canvas].beginPath();
+    ctxs[canvas].arc(x, y, r, 0, 2 * Math.PI);
+    ctxs[canvas].stroke();
+  }
+
+  function drawCollisionBox(data, type){
+    switch(type){
+      case 'CIRCLE':
+        circle(...data, "debug")
+        break;
+      case 'SQUARE':
+        drawSquare(data)
+        break;
+    }
   }

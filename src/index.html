@@ -1,18 +1,39 @@
-<canvas id="overlayCanvas" width="1275" height="600">
-</canvas>
-<canvas id="backgroundCanvas" width="1275" height="600">
-</canvas>
-<canvas id="middleCanvas" width="1275" height="600">
-</canvas>
-<canvas id="sunCanvas" width="1275" height="600">
-</canvas>
-<canvas id="debugCanvas" width="1275" height="600" style="z-index: 9999">
-</canvas>
+<html><head><meta charset="utf-8"/></head>
+<div id="gameContainer">
+    <div id="canvasContainer">
+        <canvas id="backgroundCanvas" width="1275" height="600">
+        </canvas>
+        <canvas id="middleCanvas" width="1275" height="600">
+        </canvas>
+        <canvas id="frontCanvas" width="1275" height="600">
+        </canvas>
+        <canvas id="overlayCanvas" width="1275" height="600">
+        </canvas>
+        <canvas id="debugCanvas" width="1275" height="600">
+        </canvas>
+    </div>
+    <div id="menuContainer">
+        <img src="logo.svg" class="logo">
+        <div class="menuText">Click To Play</div>
+        <div id="highScore" class="menuText"></div>
+        <div id="lastScore" class="menuText"></div>
+    </div>
+</div>
+
 
         <!-- build:js -->
+<script src="song.js"></script>
+<script src="bonusSound.js"></script>
+<script src="smallPlayer.js"></script>
+<script src="playMusic.js"></script>
 <script src="GameObject.js"></script>
+<script src="collisions.js"></script>
+<script src="Multiplier.js"></script>
+<script src="specificRenderMethods.js"></script>
 <script src="genericRenderMethods.js"></script>
 <script src="util.js"></script>
+<script src="score.js"></script>
+<script src="events.js"></script>
 <script src="obstacles.js"></script>
 <script src="player.js"></script>
 <script src="inputMgr.js"></script>
@@ -20,14 +41,71 @@
 <script src="index.js"></script>
 
         <!-- endbuild -->
+    
 <style>
     body{
         margin: 0;
         padding: 0;
     }
     canvas {
-        margin:0;
-        padding:0;
+        margin: 0;
+        padding: 0;
         position: absolute;
+        left: 0;
+        top: 0;
+    }
+    #gameContainer{
+        transition: filter 3s;
+        margin:200px auto;
+        width: 1275px;
+        height: 600px;
+        position: relative;
+        text-align: center;
+    }
+    #canvasContainer{
+        transition: all 3s;
+    }
+    #menuContainer{
+        width: 100%;
+        height: 100%;
+        transition: all 3s;
+        z-index: 999;
+    }
+    .dead{   
+        filter: hue-rotate(0deg) grayscale(0.8) contrast(0.2) blur(5px);
+    }
+    .hide{
+        opacity: 0;
+    }
+    .fullFlip{
+        filter: hue-rotate(360deg);
+    }
+    .logo{
+        position: absolute;
+        height: 300px;
+        margin: 0 auto;
+        transform: translateX(-50%);
+        user-select: none;
+    }
+    .menuText{
+        margin-top: 300px;
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        font-size: 40px;
+        font-family: monospace;
+        color: #460898;
+        user-select: none;
+    }
+    #highScore{
+        margin-top: 400px;
+        color: #7c067e;
+        font-size: 50px;
+    }
+    #lastScore{
+        margin-top: 500px;
+        color: #550457;
+        font-size: 30px;
     }
 </style>
+</html>

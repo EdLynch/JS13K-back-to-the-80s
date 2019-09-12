@@ -14,6 +14,14 @@ task('clean', () =>
     .pipe(clean()),
 )
 
+task('images', () =>
+  src('src/*.svg')
+    .pipe(imagemin([
+      imagemin.optipng({ optimizationLevel: 5 }),
+    ]))
+    .pipe(dest('dist')),
+)
+
 const compile = () => src('src/index.html')
   .pipe(htmlSrc())
   .pipe(concat('app.js'))
@@ -43,4 +51,4 @@ task('zip', () => src('dist/*')
   .pipe(dest('./')),
 )
 
-task('build', series('clean', parallel('html'), 'zip'))
+task('build', series('clean', parallel('images', 'html'), 'zip'))
