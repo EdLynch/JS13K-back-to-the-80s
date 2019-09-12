@@ -18,7 +18,7 @@ let run
 
 let alive = false
 
-let highScore = localStorage.highScore || 0
+let highScore = localStorage.back2The80sHighScore || 0
 
 document.getElementById("menuContainer").onclick = ()=> {if(!alive)startGame()}
 startGame(true)
@@ -29,7 +29,7 @@ onDeath()
 if(highScore) document.getElementById("highScore").innerHTML = "High Score:" + highScore
 
 function startGame(initial){
-  if(!musicPlaying && !initial) playMusic('music',true)
+  if(!musicPlaying && !initial) playSound('music',true)
   currentScore = 0
   currentAlt = 1
   alive = true

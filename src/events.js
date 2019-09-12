@@ -2,13 +2,14 @@ const canvasCont = document.getElementById('canvasContainer')
 
 function onDeath(){
     alive = false
+    playSound('crash')
     clearInterval(run)
     clearInterval(scoreRunner)
     stopPsychedelic()
     addClass(canvasCont, 'dead')
     if(highScore && currentScore > highScore){
         document.getElementById("highScore").innerHTML = "New High Score:" + currentScore
-        localStorage.highScore = currentScore
+        localStorage.back2The80sHighScore = currentScore
         highScore = currentScore
     }else{
         document.getElementById("highScore").innerHTML = "High Score:" + highScore
@@ -22,7 +23,7 @@ let go
 
 function startPsychedelic(time){
     if(currentAlt === 1){
-        
+        playSound('bonus')
         addClass(canvasCont, 'fullFlip')
         currentAlt+=2
         go = setInterval(()=>{
