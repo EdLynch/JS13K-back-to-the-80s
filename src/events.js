@@ -7,7 +7,7 @@ function onDeath(){
     clearInterval(scoreRunner)
     stopPsychedelic()
     addClass(canvasCont, 'dead')
-    if(highScore && currentScore > highScore){
+    if(currentScore > highScore){
         document.getElementById("highScore").innerHTML = "New High Score:" + currentScore
         localStorage.back2The80sHighScore = currentScore
         highScore = currentScore
